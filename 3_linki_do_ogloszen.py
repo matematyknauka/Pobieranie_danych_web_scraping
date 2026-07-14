@@ -25,8 +25,13 @@ try:
         soup = BeautifulSoup(html_content, "html.parser")
         
         # Znajdzie każdy div, którego nazwa klasy zawiera słowo "box"
-        znaleziony_element = soup.find_all("div", class_=lambda x: x and "box" in x)
-        print(len(znaleziony_element))
+        znalezione_elementy = soup.find_all("div", class_=lambda x: x and "box" in x)
+        for znaleziony_element in znalezione_elementy:
+            znacznik = znaleziony_element.find("a")
+            if znacznik and 'href' in znacznik.attrs and znacznik.attrs['href'] != "#":
+                koncowka = znacznik.attrs['href']
+                print(f"https://www.rzeszowiak.pl{koncowka}")
+        
 
         
     else:
