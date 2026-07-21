@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 import re
 import os
 
-def scrape_rzeszowiak_links(base_url, num_pages=12):
+def scrape_rzeszowiak_links(base_url):
     all_links = set()
 
     chrome_options = Options()
@@ -23,6 +23,14 @@ def scrape_rzeszowiak_links(base_url, num_pages=12):
         driver = webdriver.Chrome(options=chrome_options)
         driver.get(base_url)
         print(f"Otwarto stronę: {base_url}")
+        soup = BeautifulSoup(driver.page_source, 'html.parser')
+
+        pages = [int(a.text) for a in soup.select("#oDnno a") if a.text.isdigit()]
+
+        num_pages = max(pages, default=1)
+
+        print(f"Wykryto liczbę stron: {num_pages}")
+
         time.sleep(5)
 
         for page_num in range(num_pages):
@@ -87,7 +95,7 @@ def scrape_rzeszowiak_links(base_url, num_pages=12):
 
 if __name__ == "__main__":
     base_url = "https://www.rzeszowiak.pl/Nieruchomosci-Sprzedam-3070011155?r=mieszkania"
-    collected_links = scrape_rzeszowiak_links(base_url, num_pages=12)
+    collected_links = scrape_rzeszowiak_links(base_url)
 
     print(f"Znaleziono łącznie {len(collected_links)} unikalnych linków:")
     for link in collected_links[:10]:
