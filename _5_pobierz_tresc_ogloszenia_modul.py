@@ -31,12 +31,34 @@ def pobierz_tresc_ogloszenia(url):
             # Następnym elementem po nagłówku jest interesujący nas div
             content_box = soup.find('div', class_='ogloszeniebox-top', string=lambda text: text and 'Treść ogłoszenia' in text)
             target_div = content_box.find_next_sibling('div', class_='ogloszeniebox-content').find('div', class_='content')
+
     
             # Pobieramy czysty tekst
             # separator='\n' zapewnia czytelność, a strip=True usuwa zbędne białe znaki
             czysta_tresc = target_div.get_text(separator='\n', strip=True)
+
+
+
+            # !!!!!!!!!!!!!!!!!!!!!Dodac komentarze!!!!!!!!!!!!!!!!1!!!!!!!!!!!!!!
+            tytulowy = soup.find('div', class_='ogloszeniebox-top', string=lambda text: text and 'Dane dodatkowe' in text)
+            wiersz_1 = tytulowy.find_next_sibling('div', class_='ogloszeniebox-content')
+            wiersz_1_text = wiersz_1.get_text(separator='\n', strip=True)
+
+            wiersz_2 = wiersz_1.find_next_sibling('div', class_='ogloszeniebox-content')
+            wiersz_2_text = wiersz_2.get_text(separator='\n', strip=True)
+
+            wiersz_3 = wiersz_2.find_next_sibling('div', class_='ogloszeniebox-content')
+            wiersz_3_text = wiersz_3.get_text(separator='\n', strip=True)
+
+            wiersz_4 = wiersz_3.find_next_sibling('div', class_='ogloszeniebox-content')
+            wiersz_4_text = wiersz_4.get_text(separator='\n', strip=True)
+
+            dane_dodatkowe = f"{wiersz_1_text}\n{wiersz_2_text}\n{wiersz_3_text}\n{wiersz_4_text}"
+
+            
     
-            return czysta_tresc
+            return f"Tresc:\n\n{czysta_tresc}\n\nDane dodatkowe\n\n{dane_dodatkowe}"
+            # return czysta_tresc
     
             
         else:
