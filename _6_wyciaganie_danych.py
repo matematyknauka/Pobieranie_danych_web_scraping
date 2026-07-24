@@ -9,9 +9,13 @@ url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash
 
 headers = {"Content-Type": "application/json"}
 
+# Odczytanie ogloszenia - robocze!!!!!!!
+with open("roboczy.txt", "r", encoding="utf-8") as plik:
+    tekst = plik.read()
+
 # Przykładowa treść ogłoszenia, którą pobierasz ze strony
 tresc_ogloszenia = (
-    "Sprzedam mieszkanie 3-pokojowe, 52m2 na osiedlu Baranówka w Rzeszowie."
+    tekst
 )
 
 # Prompt instruujący model, jakich pól oczekujesz
@@ -39,12 +43,19 @@ try:
   czysty_rekord = {
       "miejscowosc": dane_ogloszenia.get("miejscowosc"),
       "dzielnica": dane_ogloszenia.get("dzielnica"),
-      "cena_za_m2": dane_ogloszenia.get("cena_za_m2"),
+      "cena_za_m2": float(dane_ogloszenia.get("cena_za_m2")),
   }
 
-  print("Sukces! Gotowy słownik do dodania do listy:")
-  print(czysty_rekord)
-  print(type(czysty_rekord))  # <class 'dict'>
+  if not czysty_rekord["miejscowosc"] or not czysty_rekord["dzielnica"] or not czysty_rekord["cena_za_m2"] or not (czysty_rekord["cena_za_m2"] > 3000 and czysty_rekord["cena_za_m2"] < 40000):
+      print(None)
+
+  else:
+      print(czysty_rekord)
+
+
+ 
+   
+
 
   # Tutaj możesz wrzucić do swojej listy, np.:
   # lista_wynikowa.append(czysty_rekord)
